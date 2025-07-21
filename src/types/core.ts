@@ -16,30 +16,6 @@ export interface Quiz {
   questions: Question[]
 }
 
-export interface QuizAnswer {
-  question_id: number | string // ID of the question answered
-  question_type: Question['type'] // Type of the question answered
-  selected_option?: number // For multiple choice questions
-  text_answer?: string // For fill-in-the-blank questions
-  matches?: { left: number; right: number }[] // For match questions
-  placements?: { item: number; zone: number }[] // For drag-and-drop questions
-  dropdown_answers?: { id: number | string; answer: number }[] // For dropdown questions
-  correct: boolean // Whether the answer was correct
-  score: number // Score for this question
-  time_spent: number // Time spent on this question in seconds
-  feedback?: string // Optional feedback for the user
-  // Additional properties can be added as needed
-  // e.g., for labeling questions, you might have label placements
-}
-
-export interface QuizResult {
-  id: number | string
-  quiz_id: number | string
-  // user_id: number | string
-  score: number // Total score achieved
-  // time_taken: number // Time taken to complete the quiz in seconds
-  // date_taken: string // ISO date string
-}
 export type QuestionType = 'multiple_choice' | 'fill_in_blank' | 'match' | 'drag_drop' | 'drop_down'
 
 export type Question = MultipleChoiceQuestion | FillInBlankQuestion | MatchQuestion | DragDropQuestion | DropDownQuestion
@@ -90,28 +66,48 @@ export interface DropDownQuestion extends BaseQuestion {
 }
 
 export type MultipleChoiceAnswer = {
-  question_id: number | string
+  // question_id: number | string
   selected_option: number | string
 }
 
 export type FillInBlankAnswer = {
-  question_id: number | string
-  blank_responses: { blank_id: number; value: string }[]
+  // question_id: number | string
+  blank_res: { blank_id: number; value: string }[]
 }
 
 export type MatchAnswer = {
-  question_id: number | string
+  // question_id: number | string
   matched_pairs: { left_id: number; right_id: number }[]
 }
 
 export type DragDropAnswer = {
-  question_id: number | string
+  // question_id: number | string
   drop_placements: { item_id: number; zone_id: number }[]
 }
 
 export type DropDownAnswer = {
-  question_id: number | string
-  dropdown_res: { dropdown_id: number | string; value: string }[]
+  // question_id: number | string
+  dropdown_res: { dropdown_id: number | string; value: number }[]
 }
 
 export type Answer = MultipleChoiceAnswer | FillInBlankAnswer | MatchAnswer | DragDropAnswer | DropDownAnswer
+
+export interface QuizAnswer {
+  question_id: number | string // ID of the question answered
+  question_type: string // Type of the question answered
+  answer: Answer // The answer provided by the user
+  is_correct: boolean // Whether the answer was correct
+  score: number // Points scored for this question
+  // explanation?: string // Explanation for the correct answer
+  // time_spent: number // Time spent on this question in seconds
+}
+
+export interface QuizResult {
+  id: number | string
+  quiz_id: number | string
+  score: number // Total score achieved
+  time_taken: number // Time taken to complete the quiz in seconds
+  date_taken: string // ISO date string
+  total_questions: number // Total number of questions in the quiz
+  answers: QuizAnswer[] // List of answers provided by the user
+}

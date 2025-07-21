@@ -14,7 +14,6 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({ question, selectedP
   const [draggedItem, setDraggedItem] = useState<number | null>(null)
 
   const currentPlacements = selectedPlacements?.drop_placements || []
-  console.log('Current Placements:', currentPlacements)
 
   const handleDragStart = (e: React.DragEvent, itemIndex: number) => {
     setDraggedItem(itemIndex)
@@ -33,7 +32,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({ question, selectedP
     const newPlacements = currentPlacements.filter((p) => p.item_id !== draggedItem && p.zone_id !== zoneIndex)
     newPlacements.push({ item_id: draggedItem, zone_id: zoneIndex })
 
-    onPlacementsChange({ question_id: question.id, drop_placements: newPlacements })
+    onPlacementsChange({ drop_placements: newPlacements })
     setDraggedItem(null)
   }
 

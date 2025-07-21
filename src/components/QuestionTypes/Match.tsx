@@ -25,7 +25,7 @@ const Match: React.FC<MatchQuestionProps> = ({ question, selectedMatches, onMatc
     const newMatches = currentMatches.filter((match) => match.left_id !== selectedLeft && match.right_id !== rightIndex)
     newMatches.push({ left_id: selectedLeft, right_id: rightIndex })
 
-    onMatchesChange({ question_id: question.id, matched_pairs: newMatches })
+    onMatchesChange({ matched_pairs: newMatches })
     setSelectedLeft(null)
   }
 

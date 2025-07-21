@@ -1,26 +1,38 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router'
-import { Answer } from '../types/core'
+import React, { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router'
 import { quizzes } from '../data/quizData'
+import { QuizAnswer, QuizResult } from '../types/core'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Clock } from 'lucide-react'
+import { Clock, AlertCircle } from 'lucide-react'
 import QuestionRenderer from '../components/QuestionTypes/QuestionRenderer'
 
 export const QuizPage: React.FC = () => {
   let params = useParams()
+  let navigate = useNavigate()
+
   const quiz = quizzes.find((q) => q.id === params.id)
 
   if (!quiz) {
-    return <div>Quiz not found</div>
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <h1 className="text-3xl font-bold">Quiz not found</h1>
+      </div>
+    )
   }
 
+  const [quizTimeLeft, setQuizTimeLeft] = useState(600) // 10 minutes in seconds
+  const [questionTimeLeft, setQuestionTimeLeft] = useState(30) // 30 seconds per question
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [questionTimeRemaining, setQuestionTimeRemaining] = useState(0)
-  const [totalTimeRemaining, setTotalTimeRemaining] = useState(0)
   const progressPercentage = ((currentQuestionIndex + 1) / quiz.questions.length) * 100 || 0
   const [startTime] = useState(Date.now())
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting] = useState(false)
   const [answers, setAnswers] = useState<any[]>([])
+
+  // init quiz time left
+  useEffect(() => {
+    setQuizTimeLeft(quiz.duration_limit || 600) // default to 10 minutes
+    setQuestionTimeLeft(quiz.questions[currentQuestionIndex].time_limit || 30) // reset question time to 30 seconds
+  }, [quiz])
 
   // format time in MM:SS format
   const formatTime = (seconds: number): string => {
@@ -32,11 +44,42 @@ export const QuizPage: React.FC = () => {
   // get current question
   const currentQuestion = quiz.questions[currentQuestionIndex]
 
+  // handle quiz time left
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setQuizTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          // handle quiz end logic here
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  // handle question time left
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setQuestionTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          // handle question end logic here, e.g., move to next question
+          handleNextQuestion()
+          return 30 // reset to 30 seconds for the next question
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer) // cleanup on unmount
+  }, [currentQuestionIndex])
+
   // Handle previous question navigation
   const handlePrevQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
-      // setQuestionTimeRemaining(currentQuestion.time_limit || 0)
+      setQuestionTimeLeft(currentQuestion.time_limit || 60)
     }
   }
 
@@ -44,7 +87,7 @@ export const QuizPage: React.FC = () => {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
-      // setQuestionTimeRemaining(currentQuestion.time_limit || 0)
+      setQuestionTimeLeft(currentQuestion.time_limit || 60)
     }
   }
 
@@ -54,11 +97,76 @@ export const QuizPage: React.FC = () => {
     setAnswers(newAnswers)
   }
 
-  // return (
-  //   <div className="flex h-screen items-center justify-center">
-  //     <h1 className="text-3xl font-bold">Quiz Page</h1>
-  //   </div>
-  // )
+  const checkAnswer = (question: any, answer: any): boolean => {
+    switch (question.type) {
+      case 'multiple_choice':
+        return question.options[answer.selected_option] === question.options[question.correct_option]
+      case 'fill_in_blank':
+        return question.correct_answers.includes(answer.blank_res.map((a: any) => a.value.toLowerCase()))
+      case 'match':
+        return question.correct_matches.every((m: any) => answer.matched_pairs.some((a: any) => a.left_id === m.left && a.right_id === m.right))
+      case 'drag_drop':
+        return question.correct_placements.every((placement: any) =>
+          answer.drop_placements.some((dp: any) => dp.item_id === placement.item && dp.zone_id === placement.zone),
+        )
+      case 'drop_down':
+        return question.dropdowns.every((dropdown: any) => {
+          let dropAnswer = answer.dropdown_res.find((dro: any) => dro.dropdown_id === dropdown.id)
+          return dropAnswer && dropAnswer.value === dropdown.correct_option
+        })
+      default:
+        return false
+    }
+  }
+
+  const handleSubmitQuiz = () => {
+    // collect time spent for quiz
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000) // in seconds
+
+    console.log('Time Spent:', timeSpent)
+
+    // colcolect the score for each question with checking if the answer is correct
+    const quizAnswers: QuizAnswer[] = answers.map((answer, index) => {
+      const question = quiz.questions[index]
+      const isCorrect = checkAnswer(question, answer)
+
+      return {
+        question_id: question.id,
+        question_type: question.type,
+        answer: answer, // Store the answer object
+        is_correct: isCorrect,
+        score: isCorrect ? question.points || 1 : 0, // Default score of 1 if not specified
+      }
+    })
+    const totalScore = quizAnswers.reduce((sum, ans) => sum + ans.score, 0)
+
+    // create a QuizResult object and save it to local storage
+    const quizResult: QuizResult = {
+      id: `result-${Date.now()}`, // Use timestamp as a unique ID
+      quiz_id: quiz.id,
+      score: totalScore,
+      time_taken: timeSpent,
+      date_taken: new Date().toISOString(),
+      total_questions: quiz.questions.length,
+      answers: quizAnswers,
+    }
+    localStorage.setItem('quizResult', JSON.stringify(quizResult))
+
+    // redirect to results page or show a success message
+    navigate(`/results/${quizResult.id}`)
+
+    // setIsSubmitting(true)
+    // Simulate submission delay
+    // setTimeout(() => {
+    //   setIsSubmitting(false)
+    //   // Handle quiz submission logic here, e.g., save answers, calculate score, etc.
+    //   console.log('Quiz submitted:', answers)
+    //   // Redirect or show results
+    //   alert('Quiz submitted successfully!')
+    // }, 2000)
+  }
+
+  const allQuestionsAnswered = answers.length === quiz.questions.length && answers.every((a) => a !== undefined)
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -77,11 +185,11 @@ export const QuizPage: React.FC = () => {
           <div className="flex gap-4">
             <div className="flex items-center">
               <Clock className="mr-1 h-4 w-4" />
-              <span className={questionTimeRemaining < 10 ? 'font-medium text-red-600' : ''}>Question: {formatTime(questionTimeRemaining)}</span>
+              <span className={questionTimeLeft < 10 ? 'font-medium text-red-600' : ''}>Question: {formatTime(questionTimeLeft)}</span>
             </div>
             <div className="flex items-center">
               <Clock className="mr-1 h-4 w-4" />
-              <span className={totalTimeRemaining < 60 ? 'font-medium text-red-600' : ''}>Total: {formatTime(totalTimeRemaining)}</span>
+              <span className={quizTimeLeft < 60 ? 'font-medium text-red-600' : ''}>Total: {formatTime(quizTimeLeft)}</span>
             </div>
           </div>
         </div>
@@ -119,7 +227,7 @@ export const QuizPage: React.FC = () => {
           </button>
         ) : (
           <button
-            // onClick={handleSubmitQuiz}
+            onClick={handleSubmitQuiz}
             // disabled={isSubmitting}
             className={`rounded-md px-4 py-2 ${isSubmitting ? 'cursor-not-allowed bg-gray-400' : 'bg-green-600 text-white hover:bg-green-700'}`}
           >
@@ -128,14 +236,12 @@ export const QuizPage: React.FC = () => {
         )}
       </div>
 
-      {/*  {!allQuestionsAnswered && currentQuestionIndex === quiz.questions.length - 1 && (
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md flex items-center">
-          <AlertCircle className="h-5 w-5 text-yellow-500 mr-2" />
-          <span className="text-yellow-700 text-sm">
-            You haven't answered all questions. You can navigate back to review them.
-          </span>
+      {!allQuestionsAnswered && currentQuestionIndex === quiz.questions.length - 1 && (
+        <div className="mt-4 flex items-center rounded-md border border-yellow-200 bg-yellow-50 p-3">
+          <AlertCircle className="mr-2 h-5 w-5 text-yellow-500" />
+          <span className="text-sm text-yellow-700">You haven't answered all questions. You can navigate back to review them.</span>
         </div>
-      )} */}
+      )}
     </div>
   )
 }

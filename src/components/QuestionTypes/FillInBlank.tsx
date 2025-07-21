@@ -9,14 +9,14 @@ interface FIBQuestionProps {
 }
 
 const FillInBlank: React.FC<FIBQuestionProps> = ({ question, selectedAnswer, onAnswerChange }) => {
-  const currentAnswers = selectedAnswer || []
+  const currentAnswers = selectedAnswer?.blank_res || []
 
   const handleDropdownChange = (blankIndex: number, value: string) => {
     const newAnswers = currentAnswers.filter((a: any) => a.blank_id !== blankIndex)
     if (value.trim() !== '') {
       newAnswers.push({ blank_id: blankIndex, value })
     }
-    onAnswerChange(newAnswers)
+    onAnswerChange({ blank_res: newAnswers })
   }
 
   const getAnswerForDropdown = (blankIndex: number): string => {

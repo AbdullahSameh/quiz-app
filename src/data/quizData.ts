@@ -2,6 +2,109 @@ import { Quiz } from '../types/core'
 
 export const quizzes: Quiz[] = [
   {
+    id: 'a7d76e88-2569-4a2f-8f3a-80cd63b928d8',
+    title: 'Sustineo decens tenus tantillus asporto.',
+    description: 'Cultellus explicabo error soluta. Alienus autus cogito desipio cresco infit clam ulterius.',
+    category_id: '6',
+    difficulty: 'hard',
+    duration_limit: 1283,
+    questions: [
+      {
+        type: 'drag_drop',
+        id: 'feea8ac9-33c8-4ea2-9569-8c362032855e',
+        text: 'Adicio admitto desparatus amiculum abutor acerbitas acsi correptius quaerat tondeo.',
+        time_limit: 216,
+        points: 1,
+        items: ['middle', 'babushka', 'programme', 'ocelot'],
+        drop_zones: ['1st', '2st', '3st', '4st'],
+        correct_placements: [
+          {
+            item: 0,
+            zone: 2,
+          },
+          {
+            item: 1,
+            zone: 1,
+          },
+          {
+            item: 2,
+            zone: 0,
+          },
+          {
+            item: 3,
+            zone: 3,
+          },
+        ],
+      },
+      {
+        type: 'drop_down',
+        id: '9655d276-c0fb-4f73-b845-7cfdecd0592e',
+        text: 'Asperiores nihil cui avarus totam sit constans culpo audeo.',
+        time_limit: 248,
+        points: 1,
+        sentence: 'The ___ Wall fell in ___, marking the end of the Cold War era.',
+        dropdowns: [
+          {
+            id: 'f8e350c8-e33a-480c-a385-f8a896c889cc',
+            options: ['deleo', 'corona', 'contra', 'neque'],
+            correct_option: 3,
+          },
+          {
+            id: 'bca877f7-3892-4c48-a137-0a8e30297f0c',
+            options: ['demens', 'vulgaris', 'aliquam', 'ademptio'],
+            correct_option: 3,
+          },
+        ],
+      },
+      {
+        type: 'fill_in_blank',
+        id: '25b362c9-8613-4d31-b396-d01854c9b733',
+        text: 'The first President of the United States was ___.',
+        time_limit: 134,
+        points: 1,
+        correct_answers: ['resource', 'festival'],
+        case_sensitive: false,
+      },
+      {
+        type: 'match',
+        id: '52939e2e-a8cf-4b8b-b542-d6f742de0c06',
+        text: 'Texo vester cumque sophismata sint sapiente adnuo triumphus.',
+        time_limit: 145,
+        points: 1,
+        left_items: ['fireplace', 'shore', 'configuration', 'resolve'],
+        right_items: ['scarification', 'middle', 'legend', 'entry'],
+        correct_matches: [
+          {
+            left: 0,
+            right: 1,
+          },
+          {
+            left: 1,
+            right: 3,
+          },
+          {
+            left: 2,
+            right: 0,
+          },
+          {
+            left: 3,
+            right: 1,
+          },
+        ],
+      },
+      {
+        type: 'multiple_choice',
+        id: 'bf5e8369-958b-412f-94d4-f140cb73b325',
+        text: 'Adhaero suspendo urbs tardus decipio carbo antepono.',
+        time_limit: 227,
+        points: 1,
+        options: ['Umbra viridis.', 'Delego unus.', 'Illum cubicularis.', 'Virtus cupiditas.'],
+        correct_option: 2,
+        allow_multiple_answers: false,
+      },
+    ],
+  },
+  {
     id: 'c6da3039-2f6f-40d1-b889-3cb0322c7918',
     title: 'Cetera versus caterva mollitia sponte.',
     description: 'Alo auctus summopere attero deputo asper creber deleo. Desolo celo anser.',
@@ -204,136 +307,6 @@ export const quizzes: Quiz[] = [
         points: 1,
         correct_answers: ['pantyhose', 'hospitalization'],
         case_sensitive: true,
-      },
-    ],
-  },
-  {
-    id: 'a7d76e88-2569-4a2f-8f3a-80cd63b928d8',
-    title: 'Sustineo decens tenus tantillus asporto.',
-    description: 'Cultellus explicabo error soluta. Alienus autus cogito desipio cresco infit clam ulterius.',
-    category_id: '6',
-    difficulty: 'hard',
-    duration_limit: 1283,
-    questions: [
-      {
-        type: 'match',
-        id: '52939e2e-a8cf-4b8b-b542-d6f742de0c06',
-        text: 'Texo vester cumque sophismata sint sapiente adnuo triumphus.',
-        time_limit: 145,
-        points: 1,
-        left_items: ['fireplace', 'shore', 'configuration', 'resolve'],
-        right_items: ['scarification', 'middle', 'legend', 'entry'],
-        correct_matches: [
-          {
-            left: 0,
-            right: 1,
-          },
-          {
-            left: 1,
-            right: 3,
-          },
-          {
-            left: 2,
-            right: 0,
-          },
-          {
-            left: 3,
-            right: 1,
-          },
-        ],
-      },
-      {
-        type: 'drag_drop',
-        id: 'df11bcbc-fde6-4d20-9d5d-9585b9df0f8f',
-        text: 'Contabesco illo ustulo veniam decimus adinventitias.',
-        time_limit: 132,
-        points: 1,
-        items: ['annual', 'cassava', 'accelerator', 'lift'],
-        drop_zones: ['1st', '2st', '3st', '4st'],
-        correct_placements: [
-          {
-            item: 0,
-            zone: 2,
-          },
-          {
-            item: 1,
-            zone: 2,
-          },
-          {
-            item: 2,
-            zone: 1,
-          },
-          {
-            item: 3,
-            zone: 1,
-          },
-        ],
-      },
-      {
-        type: 'multiple_choice',
-        id: 'bf5e8369-958b-412f-94d4-f140cb73b325',
-        text: 'Adhaero suspendo urbs tardus decipio carbo antepono.',
-        time_limit: 227,
-        points: 1,
-        options: ['Umbra viridis.', 'Delego unus.', 'Illum cubicularis.', 'Virtus cupiditas.'],
-        correct_option: 2,
-        allow_multiple_answers: false,
-      },
-      {
-        type: 'drop_down',
-        id: '9655d276-c0fb-4f73-b845-7cfdecd0592e',
-        text: 'Asperiores nihil cui avarus totam sit constans culpo audeo.',
-        time_limit: 248,
-        points: 1,
-        sentence: 'The ___ Wall fell in ___, marking the end of the Cold War era.',
-        dropdowns: [
-          {
-            id: 'f8e350c8-e33a-480c-a385-f8a896c889cc',
-            options: ['deleo', 'corona', 'contra', 'neque'],
-            correct_option: 3,
-          },
-          {
-            id: 'bca877f7-3892-4c48-a137-0a8e30297f0c',
-            options: ['demens', 'vulgaris', 'aliquam', 'ademptio'],
-            correct_option: 3,
-          },
-        ],
-      },
-      {
-        type: 'drag_drop',
-        id: 'feea8ac9-33c8-4ea2-9569-8c362032855e',
-        text: 'Adicio admitto desparatus amiculum abutor acerbitas acsi correptius quaerat tondeo.',
-        time_limit: 216,
-        points: 1,
-        items: ['middle', 'babushka', 'programme', 'ocelot'],
-        drop_zones: ['1st', '2st', '3st', '4st'],
-        correct_placements: [
-          {
-            item: 0,
-            zone: 2,
-          },
-          {
-            item: 1,
-            zone: 1,
-          },
-          {
-            item: 2,
-            zone: 2,
-          },
-          {
-            item: 3,
-            zone: 3,
-          },
-        ],
-      },
-      {
-        type: 'fill_in_blank',
-        id: '25b362c9-8613-4d31-b396-d01854c9b733',
-        text: 'The first President of the United States was ___.',
-        time_limit: 134,
-        points: 1,
-        correct_answers: ['resource', 'festival'],
-        case_sensitive: false,
       },
     ],
   },
@@ -653,7 +626,7 @@ export const quizzes: Quiz[] = [
     description: 'Quia suppono spero vigilo quia aperiam. Inventore reiciendis deorsum.',
     category_id: '2',
     difficulty: 'hard',
-    duration_limit: 985,
+    duration_limit: 1318,
     questions: [
       {
         type: 'drop_down',
@@ -779,33 +752,6 @@ export const quizzes: Quiz[] = [
     duration_limit: 897,
     questions: [
       {
-        type: 'drag_drop',
-        id: '982a9176-0a1f-4feb-ba16-146d6a8f6ab1',
-        text: 'Creta caecus ara quae debeo magnam adfero.',
-        time_limit: 264,
-        points: 1,
-        items: ['junior', 'hello', 'event', 'dulcimer'],
-        drop_zones: ['1st', '2st', '3st', '4st'],
-        correct_placements: [
-          {
-            item: 0,
-            zone: 3,
-          },
-          {
-            item: 2,
-            zone: 1,
-          },
-          {
-            item: 3,
-            zone: 2,
-          },
-          {
-            item: 1,
-            zone: 0,
-          },
-        ],
-      },
-      {
         type: 'multiple_choice',
         id: '460c19a9-d1af-4a9f-8f85-3f0f758cec90',
         text: 'Aggero vinculum deinde ex vestigium delectus astrum bonus.',
@@ -908,6 +854,33 @@ export const quizzes: Quiz[] = [
         points: 1,
         correct_answers: ['venom', 'makeover'],
         case_sensitive: false,
+      },
+      {
+        type: 'drag_drop',
+        id: '982a9176-0a1f-4feb-ba16-146d6a8f6ab1',
+        text: 'Creta caecus ara quae debeo magnam adfero.',
+        time_limit: 264,
+        points: 1,
+        items: ['junior', 'hello', 'event', 'dulcimer'],
+        drop_zones: ['1st', '2st', '3st', '4st'],
+        correct_placements: [
+          {
+            item: 0,
+            zone: 3,
+          },
+          {
+            item: 2,
+            zone: 1,
+          },
+          {
+            item: 3,
+            zone: 2,
+          },
+          {
+            item: 1,
+            zone: 0,
+          },
+        ],
       },
       {
         type: 'match',

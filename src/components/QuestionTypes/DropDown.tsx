@@ -48,19 +48,19 @@ const DropDown: React.FC<DropDownProps> = ({ question, selectedAnswer, onAnswerC
     return result
   }
 
-  const currentAnswers = selectedAnswer || []
+  const currentAnswers = selectedAnswer?.dropdown_res || []
 
   const handleDropdownChange = (dropdownId: number | string, selectedIndex: number) => {
     const newAnswers = currentAnswers.filter((a: any) => a.id !== dropdownId)
     if (selectedIndex >= 0) {
-      newAnswers.push({ id: dropdownId, value: selectedIndex })
+      newAnswers.push({ dropdown_id: dropdownId, value: selectedIndex })
     }
-    onAnswerChange(newAnswers)
+    onAnswerChange({ dropdown_res: newAnswers })
   }
 
   const getAnswerForDropdown = (dropdownId: number | string) => {
-    const answer = currentAnswers.find((a: any) => a.id === dropdownId)
-    return answer ? answer.value : -1
+    const answer = currentAnswers.find((a: any) => a.dropdown_id === dropdownId)
+    return answer ? answer.value : -1 // Return -1 if no answer is found
   }
 
   return (
